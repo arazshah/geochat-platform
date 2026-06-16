@@ -7,16 +7,9 @@ name = "geochat-kernel"
 version = "1.0.0"
 description = "Enterprise Orchestration Engine for GeoChat Spatial AI"
 readme = "README.md"
-authors = [
-    { name = "Araz Shahkarami", email = "araz.shah@gmail.com" }
-]
 requires-python = ">=3.10"
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "Topic :: Scientific/Engineering :: GIS"
-]
 dependencies = [
-    "geochat-sdk==1.0.0",       # وابستگی مستقیم هسته به پکیج SDK
+    "geochat-sdk==1.0.0",
     "fastapi>=0.100.0",
     "uvicorn>=0.20.0",
     "networkx>=3.0",
