@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "geochat-sdk"
+version = "1.0.0"
+description = "Lightweight SDK for building GeoChat Spatial AI plugins"
+readme = "README.md"
+authors = [
+    { name = "Araz Shahkarami", email = "araz.shah@gmail.com" }
+]
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: GIS"
+]
+dependencies = [
+    "pydantic>=2.0.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["geochat_sdk*"]
