@@ -5,6 +5,8 @@
 The kernel has no geospatial or LLM dependencies of its own. Everything domain-specific, from buffering a layer to calling a routing API to asking an LLM for a plan, lives in plugins, so the same core can serve a city-search assistant, a remote-sensing workflow or an enterprise GIS backend.
 
 > Status: v1.0.0, early stage. It grew out of my work on [Mapathon](https://mapathon.ir), a Persian geospatial assistant. MIT licensed.
+>
+> **See it in a real product:** [smart_spatial_system](https://github.com/arazshah/smart_spatial_system) builds 36 spatial plugins, a QuerySpec planner and a React workbench on this kernel and SDK.
 
 ---
 
