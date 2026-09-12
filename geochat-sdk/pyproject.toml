@@ -25,6 +25,12 @@ classifiers = [
 ]
 dependencies = [
     "pydantic>=2.0.0",
+    # geochat_sdk imports geochat_kernel at module level in 13 places
+    # (decorators.py, plugin.py, types/raster.py, types/vector.py), so
+    # importing this package without the kernel installed fails outright.
+    # The dependency runs sdk -> kernel, NOT kernel -> sdk: geochat_kernel
+    # contains no reference to geochat_sdk at all.
+    "geochat-kernel>=1.0.0",
 ]
 
 [project.urls]

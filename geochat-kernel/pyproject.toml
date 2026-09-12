@@ -24,7 +24,12 @@ classifiers = [
     "Topic :: Scientific/Engineering :: GIS",
 ]
 dependencies = [
-    "geochat-sdk==1.0.0",
+    # NOTE: geochat-sdk was previously declared here, but geochat_kernel
+    # contains no reference to geochat_sdk anywhere in its source - the
+    # real dependency runs the other way (the sdk imports the kernel at
+    # module level). Declaring it here created a circular dependency in
+    # the published metadata and forced the two versions into lockstep
+    # via an == pin, so it was removed.
     "fastapi>=0.100.0",
     "uvicorn>=0.20.0",
     "networkx>=3.0",

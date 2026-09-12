@@ -28,4 +28,6 @@ __all__ = [
     "SDKValidationError",
 ]
 
+# Must match [project].version in ../pyproject.toml - that file is the
+# source of truth for what PyPI publishes.
 __version__ = "1.0.0"
