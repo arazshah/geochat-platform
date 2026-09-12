@@ -1,0 +1,87 @@
+name: Publish to PyPI
+
+# Publishes geochat-sdk and geochat-kernel to PyPI using Trusted Publishing
+# (OIDC) - no API token is stored in this repository.
+#
+# One-time setup on pypi.org (per project, done by the repository owner):
+#   PyPI -> Your projects -> Publishing (or, for a project that does not
+#   exist on PyPI yet, "Add a pending publisher" under Account settings ->
+#   Publishing), with:
+#     Owner:            arazshah
+#     Repository:       geochat-platform
+#     Workflow name:    publish.yml
+#     Environment name: pypi
+#
+# Publishing order matters: geochat-kernel depends on geochat-sdk==1.0.0,
+# so the sdk job must finish first.
+#
+# To release: push a tag like v1.0.0, or run this workflow manually.
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build distributions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install build tooling
+        run: python -m pip install --upgrade build
+
+      - name: Build geochat-sdk
+        run: python -m build --outdir dist-sdk geochat-sdk
+
+      - name: Build geochat-kernel
+        run: python -m build --outdir dist-kernel geochat-kernel
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-sdk
+          path: dist-sdk/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-kernel
+          path: dist-kernel/
+
+  publish-sdk:
+    name: Publish geochat-sdk
+    needs: build
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist-sdk
+          path: dist/
+
+      - uses: pypa/gh-action-pypi-publish@release/v1
+
+  publish-kernel:
+    name: Publish geochat-kernel
+    # Depends on publish-sdk, not just build: geochat-kernel requires
+    # geochat-sdk==1.0.0, so the sdk has to be on PyPI first for the
+    # kernel to be installable.
+    needs: publish-sdk
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist-kernel
+          path: dist/
+
+      - uses: pypa/gh-action-pypi-publish@release/v1

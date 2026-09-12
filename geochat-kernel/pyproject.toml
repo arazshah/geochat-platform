@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0.0", "wheel"]
+requires = ["setuptools>=77", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -8,6 +8,21 @@ version = "1.0.0"
 description = "Enterprise Orchestration Engine for GeoChat Spatial AI"
 readme = "README.md"
 requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Araz Shah" }]
+keywords = ["geospatial", "gis", "orchestration", "spatial-analysis", "geoai"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: GIS",
+]
 dependencies = [
     "geochat-sdk==1.0.0",
     "fastapi>=0.100.0",
@@ -16,6 +31,11 @@ dependencies = [
     "httpx>=0.24.0",
     "jinja2>=3.0.0"
 ]
+
+[project.urls]
+Homepage = "https://github.com/arazshah/geochat-platform"
+Repository = "https://github.com/arazshah/geochat-platform"
+Issues = "https://github.com/arazshah/geochat-platform/issues"
 
 [tool.setuptools.packages.find]
 where = ["."]
