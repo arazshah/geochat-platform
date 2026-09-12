@@ -1,0 +1,44 @@
+name: Publish geochat-sdk to PyPI
+
+# Publishes geochat-sdk via PyPI Trusted Publishing (OIDC) - no API token
+# is stored in this repository. See publish-kernel.yml's header for why
+# each package gets its own workflow file and why publish order is not
+# enforced between the two.
+#
+# One-time setup on pypi.org (owner only): Account settings -> Publishing
+# -> "Add a pending publisher":
+#     PyPI project name: geochat-sdk
+#     Owner:             arazshah
+#     Repository:        geochat-platform
+#     Workflow name:     publish-sdk.yml
+#     Environment name:  pypi
+#
+# To release: push a tag like v1.0.0, or run this workflow manually.
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  publish:
+    name: Build and publish geochat-sdk
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install build tooling
+        run: python -m pip install --upgrade build
+
+      - name: Build geochat-sdk
+        run: python -m build --outdir dist geochat-sdk
+
+      - uses: pypa/gh-action-pypi-publish@release/v1
