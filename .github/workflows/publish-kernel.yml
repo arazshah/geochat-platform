@@ -1,0 +1,54 @@
+name: Publish geochat-kernel to PyPI
+
+# Publishes geochat-kernel via PyPI Trusted Publishing (OIDC) - no API
+# token is stored in this repository.
+#
+# WHY THIS IS A SEPARATE WORKFLOW FILE from publish-sdk.yml: PyPI refuses
+# to register two *pending* trusted publishers that share the same
+# (owner, repository, workflow filename, environment) configuration, since
+# at upload time it would have no way to tell which not-yet-created
+# project an OIDC token belongs to. One file per package keeps each
+# configuration unique.
+#
+# Publish order is NOT enforced across the two workflows, and does not
+# need to be: PyPI does not verify that a distribution's dependencies
+# resolve at upload time. The sdk -> kernel dependency only matters when
+# someone installs, by which point both uploads have completed.
+#
+# One-time setup on pypi.org (owner only): Account settings -> Publishing
+# -> "Add a pending publisher":
+#     PyPI project name: geochat-kernel
+#     Owner:             arazshah
+#     Repository:        geochat-platform
+#     Workflow name:     publish-kernel.yml
+#     Environment name:  pypi
+#
+# To release: push a tag like v1.0.0, or run this workflow manually.
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  publish:
+    name: Build and publish geochat-kernel
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install build tooling
+        run: python -m pip install --upgrade build
+
+      - name: Build geochat-kernel
+        run: python -m build --outdir dist geochat-kernel
+
+      - uses: pypa/gh-action-pypi-publish@release/v1
