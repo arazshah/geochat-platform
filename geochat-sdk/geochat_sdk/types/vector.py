@@ -64,9 +64,22 @@ class VectorOut:
         self.metadata = metadata or {}
 
     @classmethod
-    def from_geopandas(cls, gdf: Any) -> VectorOut:
-        """Create VectorOut from a GeoDataFrame."""
-        geojson_str = gdf.to_json()
+    def from_geopandas(cls, gdf: Any, **to_json_kwargs: Any) -> VectorOut:
+        """
+        Create VectorOut from a GeoDataFrame.
+
+        gdf.to_json() has no default handler for non-JSON-native dtypes
+        (e.g. datetime64/Timestamp columns, which geopandas.read_file()
+        infers automatically from source data like OSM check_date/
+        start_date tags), so it raises TypeError on any GeoDataFrame that
+        has one. Default to str(...) for those values, matching this
+        organization's own equivalent conversion in
+        s3geo._to_geojson_dict(). A caller can override this (or any
+        other GeoDataFrame.to_json keyword, such as drop_id) via
+        to_json_kwargs.
+        """
+        to_json_kwargs.setdefault("default", str)
+        geojson_str = gdf.to_json(**to_json_kwargs)
         geojson = json.loads(geojson_str)
         return cls(features=geojson.get("features", []))
 

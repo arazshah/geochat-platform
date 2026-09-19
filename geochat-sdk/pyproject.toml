@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "geochat-sdk"
-version = "1.0.0"
+version = "1.0.1"
 description = "Lightweight SDK for building GeoChat Spatial AI plugins"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -32,6 +32,12 @@ dependencies = [
     # contains no reference to geochat_sdk at all.
     "geochat-kernel>=1.0.0",
 ]
+
+[project.optional-dependencies]
+# Only needed to run this package's own test suite - not a runtime
+# dependency of geochat_sdk itself (types/vector.py's geopandas usage is
+# import-guarded at call time, see SDKDependencyError).
+dev = ["pytest", "geopandas", "shapely", "pandas"]
 
 [project.urls]
 Homepage = "https://github.com/arazshah/geochat-platform"
