@@ -15,17 +15,18 @@ name: Tag Release
 # `permissions` block below, expires when the job ends) to do the tag push
 # from inside Actions, where that restriction doesn't apply.
 #
-# To run: Actions tab -> "Tag Release" -> "Run workflow" -> enter the
-# version (e.g. "1.0.1", no "v" prefix) -> Run. Or trigger via the GitHub
-# API/MCP tools with the same input. The job refuses to run unless
-# geochat-sdk/pyproject.toml's version already matches the requested tag,
-# so this can't tag a version nobody actually built.
+# To run: Actions tab -> "Tag Release" -> "Run workflow" -> pick the ref
+# to release from -> enter the version (e.g. "1.0.1", no "v" prefix) ->
+# Run. Or trigger via the GitHub API/MCP tools with the same input. The
+# job refuses to run unless geochat-sdk/pyproject.toml's version (on the
+# ref it's dispatched against) already matches the requested tag, so this
+# can't tag a version nobody actually built.
 
 on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version to tag, without the "v" prefix (e.g. 1.0.1). Must match geochat-sdk/pyproject.toml.'
+        description: 'Version to tag, without the "v" prefix (e.g. 1.0.1). Must match geochat-sdk/pyproject.toml on the ref this is run against.'
         required: true
 
 permissions:
